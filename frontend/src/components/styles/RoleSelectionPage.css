@@ -1,0 +1,495 @@
+/* ==================== VARIABLES CSS ==================== */
+:root {
+  --primary-blue: #4f46e5;
+  --primary-purple: #7c3aed;
+  --primary-green: #10b981;
+  --primary-red: #ef4444;
+  --primary-orange: #f59e0b;
+  --primary-cyan: #06b6d4;
+  --dark-slate: #1e293b;
+  --medium-slate: #334155;
+  --light-slate: #64748b;
+  --text-white: #ffffff;
+  --text-light: #f8fafc;
+  --text-gray: #6b7280;
+  --text-dark: #111827;
+  --background-light: #f1f5f9;
+  --background-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 15px 40px rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 30px rgba(79, 70, 229, 0.3);
+  --border-radius: 12px;
+  --border-radius-large: 20px;
+  --transition-fast: all 0.2s ease;
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --backdrop-blur: blur(15px);
+}
+
+/* ==================== BASE STYLES ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--text-dark);
+  background: var(--background-gradient);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  overflow-x: hidden;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ==================== ROLE SELECTION CONTAINER ==================== */
+.role-selection-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.role-selection-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(79, 70, 229, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(124, 58, 237, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.2) 0%, transparent 60%);
+  pointer-events: none;
+  animation: floatingOrbs 20s ease-in-out infinite;
+}
+
+@keyframes floatingOrbs {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -40px) scale(1.1); }
+  66% { transform: translate(-30px, 30px) scale(0.9); }
+}
+
+/* ==================== ROLE SELECTION BOX ==================== */
+.role-selection-box {
+  background: var(--glass-bg);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  padding: 3rem;
+  border-radius: var(--border-radius-large);
+  box-shadow: 
+    var(--shadow-heavy),
+    0 0 50px rgba(79, 70, 229, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--glass-border);
+  width: 100%;
+  max-width: 550px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+  animation: fadeInUp 0.8s ease-out;
+  color: var(--text-white);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.role-selection-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    0 0 60px rgba(79, 70, 229, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.role-selection-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 255, 255, 0.05) 30%,
+    rgba(79, 70, 229, 0.05) 70%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  pointer-events: none;
+  animation: backgroundShimmer 10s ease-in-out infinite;
+}
+
+@keyframes backgroundShimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.role-selection-box::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==================== ROLE SELECTION HEADER ==================== */
+.role-selection-box h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-white);
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg, 
+    var(--text-white) 0%, 
+    rgba(255, 255, 255, 0.9) 50%,
+    var(--text-white) 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: titleShimmer 3s ease-in-out infinite;
+}
+
+@keyframes titleShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.role-selection-box h3 {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 2rem;
+  font-weight: 400;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ==================== ROLE BUTTONS ==================== */
+.role-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.role-button {
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+  color: white;
+  padding: 1.2rem 2rem;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 
+    var(--shadow-medium),
+    0 0 30px rgba(79, 70, 229, 0.4);
+  animation: fadeInLeft 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.role-button:nth-child(1) { animation-delay: 0.2s; }
+.role-button:nth-child(2) { animation-delay: 0.4s; }
+.role-button:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.role-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent
+  );
+  transition: var(--transition-smooth);
+}
+
+.role-button:hover {
+  background: linear-gradient(135deg, #4338ca, #5b21b6);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 
+    0 10px 25px rgba(79, 70, 229, 0.4),
+    0 0 40px rgba(79, 70, 229, 0.6);
+}
+
+.role-button:hover::before {
+  left: 100%;
+}
+
+.role-button:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+/* ==================== ROLE BUTTON VARIANTS ==================== */
+.role-button.admin {
+  background: linear-gradient(135deg, var(--primary-red), #dc2626);
+  box-shadow: 
+    var(--shadow-medium),
+    0 0 30px rgba(239, 68, 68, 0.4);
+}
+
+.role-button.admin:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  box-shadow: 
+    0 10px 25px rgba(239, 68, 68, 0.4),
+    0 0 40px rgba(239, 68, 68, 0.6);
+}
+
+.role-button.client {
+  background: linear-gradient(135deg, var(--primary-green), #047857);
+  box-shadow: 
+    var(--shadow-medium),
+    0 0 30px rgba(16, 185, 129, 0.4);
+}
+
+.role-button.client:hover {
+  background: linear-gradient(135deg, #047857, #065f46);
+  box-shadow: 
+    0 10px 25px rgba(16, 185, 129, 0.4),
+    0 0 40px rgba(16, 185, 129, 0.6);
+}
+
+.role-button.technician {
+  background: linear-gradient(135deg, var(--primary-orange), #d97706);
+  box-shadow: 
+    var(--shadow-medium),
+    0 0 30px rgba(245, 158, 11, 0.4);
+}
+
+.role-button.technician:hover {
+  background: linear-gradient(135deg, #d97706, #b45309);
+  box-shadow: 
+    0 10px 25px rgba(245, 158, 11, 0.4),
+    0 0 40px rgba(245, 158, 11, 0.6);
+}
+
+/* ==================== LOGOUT BUTTON ==================== */
+.logout-button {
+  background: linear-gradient(135deg, var(--primary-red), #dc2626);
+  color: white;
+  padding: 0.9rem 1.5rem;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  margin-top: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 
+    var(--shadow-medium),
+    0 0 30px rgba(239, 68, 68, 0.4);
+  z-index: 1;
+  animation: fadeIn 0.8s ease-out 0.8s both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.logout-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent
+  );
+  transition: var(--transition-smooth);
+}
+
+.logout-button:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 8px 25px rgba(239, 68, 68, 0.4),
+    0 0 40px rgba(239, 68, 68, 0.6);
+}
+
+.logout-button:hover::before {
+  left: 100%;
+}
+
+/* ==================== ROLE ICONS ==================== */
+.role-button .role-icon {
+  margin-right: 0.75rem;
+  font-size: 1.3rem;
+  transition: var(--transition-smooth);
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+}
+
+.role-button:hover .role-icon {
+  transform: scale(1.2) rotate(10deg);
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 768px) {
+  .role-selection-container {
+    padding: 1rem;
+  }
+  
+  .role-selection-box {
+    padding: 2rem;
+    max-width: 100%;
+  }
+  
+  .role-selection-box h2 {
+    font-size: 2rem;
+  }
+  
+  .role-selection-box h3 {
+    font-size: 1.1rem;
+  }
+  
+  .role-button {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .logout-button {
+    padding: 0.8rem 1.25rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .role-selection-box {
+    padding: 1.5rem;
+    margin: 0.5rem;
+  }
+  
+  .role-selection-box h2 {
+    font-size: 1.8rem;
+  }
+  
+  .role-selection-box h3 {
+    font-size: 1rem;
+  }
+  
+  .role-buttons {
+    gap: 0.75rem;
+  }
+  
+  .role-button {
+    padding: 0.9rem 1.25rem;
+    font-size: 0.95rem;
+  }
+  
+  .logout-button {
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+@media (prefers-reduced-motion: reduce) {
+  .role-selection-box,
+  .role-button,
+  .logout-button {
+    animation: none;
+    transition: none;
+  }
+  
+  .role-button:hover,
+  .logout-button:hover {
+    transform: none;
+  }
+}
+
+/* ==================== HIGH CONTRAST MODE ==================== */
+@media (prefers-contrast: high) {
+  .role-selection-box {
+    border: 2px solid var(--text-white);
+  }
+  
+  .role-button,
+  .logout-button {
+    border: 2px solid var(--text-white);
+  }
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+  .role-selection-container {
+    background: white;
+    color: black;
+  }
+  
+  .role-selection-box {
+    background: white;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .role-button,
+  .logout-button {
+    background: white;
+    color: black;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}

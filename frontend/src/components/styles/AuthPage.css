@@ -1,0 +1,414 @@
+/* src/styles/AuthPage.css ou ajouter à LoginPage.css */
+.login-form-wrapper{
+    flex: 1;
+    display: flex;
+    justify-content: center; /* ✅ centre horizontalement */
+    align-items: center;     /* ✅ centre verticalement */
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+.mobile-footer{
+    display: none; /* caché par défaut */
+}
+.auth-page-container {
+    display: flex;
+    flex-direction: column;       /* ✅ organisation verticale */
+    min-height: 100dvh;           /* ✅ hauteur utile mobile */
+    padding: 20px;
+    background: linear-gradient(135deg, #f0f2f5 0%, #e0e5ec 100%);
+    overflow-y: auto;             /* ✅ scroll si besoin */
+    box-sizing: border-box;
+}
+
+.auth-box {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    margin: auto; /* ✅ centre verticalement tant qu’il y a de la place */
+}
+.auth-header h2 {
+    font-size: 2.2em;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+.auth-page-container {
+    display: flex;
+    flex-direction: column; /* ✅ plus flexible */
+    justify-content: center;
+    align-items: center;
+    min-height: 100dvh; /* prend bien la hauteur réelle */
+    padding: 20px;
+    background: linear-gradient(135deg, #f0f2f5 0%, #e0e5ec 100%);
+    overflow-y: auto; /* ✅ permet de scroller si trop grand */
+    box-sizing: border-box;
+}
+
+.auth-header h2 {
+    font-size: 2.2em;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.auth-header .subtitle {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 0.95em;
+}
+
+.input-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.input-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+.input-label .label-icon {
+    margin-right: 8px;
+    color: #007bff; /* Couleur de l'icône */
+}
+
+.input-wrapper {
+    position: relative;
+    color: #333;
+    background-color: #5a5656;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    color: #333;
+    transition: all 0.3s ease;
+    box-sizing: border-box; /* Important pour inclure le padding dans la largeur */
+}
+
+.form-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+    font-size: 1.1em;
+    padding: 5px;
+    transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: #333;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 14px 20px;
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.submit-button:hover:not(:disabled) {
+    background: linear-gradient(45deg, #0056b3, #007bff);
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+}
+
+.submit-button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.button-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.button-icon {
+    font-size: 1.2em;
+}
+
+.loading-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.loading-spinner {
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid #fff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.auth-links {
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+
+.auth-links .link {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.auth-links .link:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+.alert {
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9em;
+    text-align: left;
+}
+
+.alert-error {
+    background-color: #ffe0e0;
+    color: #d32f2f;
+    border: 1px solid #d32f2f;
+}
+
+.alert-success {
+    background-color: #e0ffe0;
+    color: #388e3c;
+    border: 1px solid #388e3c;
+}
+
+.alert-icon {
+    font-size: 1.2em;
+}
+
+/* Styles pour les options (checkbox et lien) */
+.options-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+}
+
+.checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 28px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #555;
+}
+
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkbox-custom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: gray;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.checkbox-container:hover input ~ .checkbox-custom {
+    background-color: gray;
+}
+
+.checkbox-container input:checked ~ .checkbox-custom {
+    background-color: #007bff;
+}
+
+.checkbox-custom:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-container input:checked ~ .checkbox-custom:after {
+    display: block;
+}
+
+.checkbox-container .checkbox-custom:after {
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.forgot-password {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+/* Responsive adjustments for smaller screens *//* Responsive adjustments */
+@media (max-width: 1024px) {
+    .auth-box {
+        padding: 30px;
+        max-width: 400px;
+    }
+
+    .auth-header h2 {
+        font-size: 1.8em;
+    }
+}
+
+@media (max-width: 768px) {
+    .auth-page-container {
+        justify-content: flex-start; /* ✅ colle en haut */
+        padding-top: 40px;           /* espace pour respirer */
+    }
+    .auth-box {
+        margin: 0 auto 40px; /* un peu d’air en bas */
+    }
+    .login-page-container {
+        padding: 15px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: center;
+        height: auto;
+    }
+
+    .auth-box {
+        width: 100%;
+        max-width: 350px;
+        padding: 25px 20px;
+    }
+
+    .auth-header h2 {
+        font-size: 1.6em;
+    }
+
+    .auth-header .subtitle {
+        font-size: 0.9em;
+    }
+
+    .form-input {
+        padding: 10px 12px;
+        font-size: 0.95em;
+    }
+
+    .submit-button {
+        font-size: 1em;
+        padding: 12px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-box {
+        max-width: 90%;
+        padding: 20px 15px;
+        border-radius: 8px;
+    }
+
+    .auth-header h2 {
+        font-size: 1.4em;
+    }
+
+    .auth-header .subtitle {
+        font-size: 0.85em;
+    }
+
+    .options-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .submit-button {
+        font-size: 0.9em;
+        padding: 10px;
+    }
+}
+
+
+/* Mobile responsive */
+@media (max-width: 1024px) {
+.login-page-container {
+    flex-direction: column; /* ✅ sidebar au-dessus du form */
+}
+
+  .login-page-container .sidebar {
+    /* min-width: 100%;
+    box-shadow: none;
+    padding: 20px; */
+    display: none;
+  }
+
+.login-form-wrapper {
+    flex: unset;
+    justify-content: flex-start; /* ✅ colle en haut sur mobile */
+    padding: 20px;
+  }
+
+.login-box {
+    margin: 20px auto 40px; /* ✅ espace bas pour scroll */
+    padding: 25px 20px;
+  }
+}

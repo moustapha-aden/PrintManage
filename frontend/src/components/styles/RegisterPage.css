@@ -1,0 +1,527 @@
+/* ==================== VARIABLES CSS ==================== */
+:root {
+  --primary-blue: #4f46e5;
+  --primary-purple: #7c3aed;
+  --primary-green: #10b981;
+  --primary-red: #ef4444;
+  --primary-orange: #f59e0b;
+  --dark-slate: #1e293b;
+  --medium-slate: #334155;
+  --light-slate: #64748b;
+  --text-white: #ffffff;
+  --text-light: #f8fafc;
+  --text-gray: #6b7280;
+  --text-dark: #111827;
+  --background-light: #f1f5f9;
+  --background-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 15px 40px rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 30px rgba(79, 70, 229, 0.3);
+  --border-radius: 12px;
+  --border-radius-large: 20px;
+  --transition-fast: all 0.2s ease;
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --backdrop-blur: blur(15px);
+}
+
+/* ==================== BASE STYLES ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--text-dark);
+  background: var(--background-gradient);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  overflow-x: hidden;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ==================== REGISTER PAGE CONTAINER ==================== */
+.register-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-page-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(79, 70, 229, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(124, 58, 237, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.2) 0%, transparent 60%);
+  pointer-events: none;
+  animation: floatingOrbs 20s ease-in-out infinite;
+}
+
+@keyframes floatingOrbs {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -40px) scale(1.1); }
+  66% { transform: translate(-30px, 30px) scale(0.9); }
+}
+
+/* ==================== REGISTER BOX ==================== */
+.register-box {
+  background: var(--glass-bg);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  padding: 3rem;
+  border-radius: var(--border-radius-large);
+  box-shadow: 
+    var(--shadow-heavy),
+    0 0 50px rgba(79, 70, 229, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--glass-border);
+  width: 100%;
+  max-width: 550px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+  animation: fadeInUp 0.8s ease-out;
+  color: var(--text-white);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.register-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    0 0 60px rgba(79, 70, 229, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.register-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 255, 255, 0.05) 30%,
+    rgba(79, 70, 229, 0.05) 70%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  pointer-events: none;
+  animation: backgroundShimmer 10s ease-in-out infinite;
+}
+
+@keyframes backgroundShimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.register-box::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==================== REGISTER HEADER ==================== */
+.register-box h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-white);
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg, 
+    var(--text-white) 0%, 
+    rgba(255, 255, 255, 0.9) 50%,
+    var(--text-white) 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: titleShimmer 3s ease-in-out infinite;
+}
+
+@keyframes titleShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.register-box .subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ==================== INPUT GROUPS ==================== */
+.input-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+  position: relative;
+  z-index: 1;
+  animation: fadeInLeft 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.input-group:nth-child(1) { animation-delay: 0.1s; }
+.input-group:nth-child(2) { animation-delay: 0.2s; }
+.input-group:nth-child(3) { animation-delay: 0.3s; }
+.input-group:nth-child(4) { animation-delay: 0.4s; }
+.input-group:nth-child(5) { animation-delay: 0.5s; }
+.input-group:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: black;
+  font-size: 1rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ==================== FORM INPUTS ==================== */
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  color: var(--text-white);
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transition: var(--transition-smooth);
+  box-sizing: border-box;
+  font-weight: 500;
+}
+
+.input-group input::placeholder {
+  color: white;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.input-group select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5rem 1.5rem;
+  padding-right: 3rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.input-group select option {
+  background: var(--dark-slate);
+  color: var(--text-white);
+  padding: 0.5rem;
+}
+
+/* ==================== REGISTER BUTTON ==================== */
+.register-button {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, var(--primary-green), #047857);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 
+    var(--shadow-medium),
+    0 0 30px rgba(16, 185, 129, 0.4);
+  z-index: 1;
+  animation: fadeInUp 0.8s ease-out 0.7s both;
+}
+
+.register-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent
+  );
+  transition: var(--transition-smooth);
+}
+
+.register-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #047857, #065f46);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 10px 25px rgba(16, 185, 129, 0.4),
+    0 0 40px rgba(16, 185, 129, 0.6);
+}
+
+.register-button:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.register-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.register-button:disabled {
+  background: linear-gradient(135deg, var(--light-slate), var(--medium-slate));
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: var(--shadow-light);
+}
+
+/* ==================== LOGIN TEXT ==================== */
+.login-text {
+  margin-top: 2rem;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 0.8s ease-out 0.8s both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.login-text a {
+  color: var(--text-white);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition-fast);
+  text-shadow: 0 0 8px rgba(240, 147, 251, 0.6);
+}
+
+.login-text a:hover {
+  text-decoration: underline;
+  color: var(--primary-cyan);
+  text-shadow: 0 0 12px rgba(6, 182, 212, 0.8);
+}
+
+/* ==================== MESSAGES ==================== */
+.error-message {
+  background: linear-gradient(135deg, 
+    rgba(239, 68, 68, 0.2) 0%,
+    rgba(239, 68, 68, 0.1) 100%
+  );
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  color: #ffebee;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  animation: shake 0.5s ease-in-out;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.success-message {
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.2) 0%,
+    rgba(16, 185, 129, 0.1) 100%
+  );
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  color: #e8f5e8;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 768px) {
+  .register-page-container {
+    padding: 1rem;
+  }
+  
+  .register-box {
+    padding: 2rem;
+    max-width: 100%;
+  }
+  
+  .register-box h2 {
+    font-size: 2rem;
+  }
+  
+  .input-group input,
+  .input-group select {
+    padding: 0.9rem 1rem;
+    font-size: 0.95rem;
+  }
+  
+  .register-button {
+    padding: 0.9rem 1.25rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-box {
+    padding: 1.5rem;
+    margin: 0.5rem;
+  }
+  
+  .register-box h2 {
+    font-size: 1.8rem;
+  }
+  
+  .register-box .subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .input-group {
+    margin-bottom: 1.25rem;
+  }
+  
+  .input-group input,
+  .input-group select {
+    padding: 0.8rem 0.9rem;
+    font-size: 0.9rem;
+  }
+  
+  .register-button {
+    padding: 0.8rem 1rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+@media (prefers-reduced-motion: reduce) {
+  .register-box,
+  .input-group,
+  .register-button,
+  .login-text {
+    animation: none;
+    transition: none;
+  }
+  
+  .register-button:hover {
+    transform: none;
+  }
+}
+
+/* ==================== HIGH CONTRAST MODE ==================== */
+@media (prefers-contrast: high) {
+  .register-box {
+    border: 2px solid var(--text-white);
+  }
+  
+  .input-group input,
+  .input-group select {
+    border: 2px solid var(--text-white);
+  }
+  
+  .register-button {
+    border: 2px solid var(--text-white);
+  }
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+  .register-page-container {
+    background: white;
+    color: black;
+  }
+  
+  .register-box {
+    background: white;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .input-group input,
+  .input-group select,
+  .register-button {
+    background: white;
+    color: black;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}

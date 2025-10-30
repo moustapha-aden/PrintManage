@@ -1,0 +1,779 @@
+/* src/styles/ManagementPage.css ou AnalysisPage.css */
+
+/* Styles Généraux pour la Page de Gestion/Analyse */
+.management-page-container {
+    padding: 10px;
+    /* background: linear-gradient(160deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.95) 100%); */
+
+    min-height: calc(100vh - 60px); /* Ajustez si votre header a une hauteur fixe */
+}
+
+.management-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    /* border-bottom: 1px solid #e0e0e0; Ligne de séparation sous l'en-tête */
+}
+
+.management-header h2 {
+    font-size: 28px;
+    margin: 0;
+}
+
+.breadcrumb {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+/* Styles pour le filtre de période d'analyse (nouveauté basée sur l'image) */
+.analysis-period-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.analysis-period-filter label {
+    font-weight: bold;
+    color: #555;
+}
+
+.analysis-period-filter .period-buttons button {
+    background-color: #f0f2f5;
+    border: 1px solid #000;
+    border-radius: 6px;
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    color: #333;
+}
+
+.analysis-period-filter .period-buttons button.active {
+    background-color: #007bff; /* Couleur bleue de PrintManager */
+    color: white;
+    border-color: #007bff;
+}
+
+.analysis-period-filter .period-buttons button:hover:not(.active) {
+    background-color: #0e0000;
+}
+
+.analysis-period-filter .data-summary {
+    margin-left: auto; /* Pousse le texte à droite */
+    font-size: 14px;
+    color: #666;
+}
+
+
+/* Barre de recherche (réutilisation ou adaptation) */
+.filter-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    align-items: stretch;
+    position: relative;
+    width: 100%;
+}
+
+.filter-bar .search-input {
+    flex: 1 1 300px;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 250px;
+    position: relative;
+}
+
+.filter-bar .search-input:focus-within {
+    border-color: #D92231;
+    box-shadow: 0 0 0 3px rgba(217, 34, 49, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+.filter-bar .search-input svg {
+    position: absolute;
+    left: 1rem;
+    color: #6b7280;
+    font-size: 1.125rem;
+    transition: all 0.15s ease-in-out;
+    flex-shrink: 0;
+    pointer-events: none;
+}
+
+.filter-bar .search-input:focus-within svg {
+    color: #D92231;
+    transform: scale(1.05);
+}
+
+.filter-bar .search-input input {
+    flex: 1;
+    padding: 0 0 0 2.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    font-size: 0.9375rem;
+    color: #111827;
+    background-color: transparent;
+    outline: none;
+    width: 100%;
+}
+
+.filter-bar .search-input input::placeholder {
+    color: #9ca3af;
+}
+
+.filter-bar .search-button {
+    background: linear-gradient(135deg, #D92231, #B91C1C);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.filter-bar .search-button:hover {
+    background: linear-gradient(135deg, #B91C1C, #991B1B);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+}
+
+
+/* Cartes de Section Analytique (Vue d'ensemble, Stats par Société, etc.) */
+.analysis-section-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Ombre plus prononcée pour les cartes */
+    padding: 25px;
+    margin-bottom: 25px; /* Espacement entre les cartes */
+}
+
+.analysis-section-card h3 {
+    font-size: 22px;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee; /* Ligne sous le titre de la section */
+    padding-bottom: 10px;
+}
+
+.analysis-section-card .card-icon {
+    margin-right: 10px;
+    color: #007bff; /* Couleur des icônes de titre */
+    font-size: 24px;
+}
+
+/* Grille de Vue d'Ensemble Système */
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 4 colonnes sur des écrans larges */
+    gap: 20px; /* Espacement entre les éléments */
+}
+
+.overview-item {
+    /* Changez cette ligne pour la nouvelle couleur de fond */
+    /* background-color: #e0f2f7; Exemple: Un bleu clair subtil */
+    /* Ou essayez d'autres couleurs : */
+    /* background-color: #f0f4f8; Un gris-bleu très doux */
+    /* background-color: #e8f5e9; */ /* Un vert clair */
+    /* background-color: #fffde7; */ /* Un jaune crème très clair */
+    background-color: #eceff1; /* Un gris froid clair */
+    /* background-color: #2a5c88; Un bleu doux */
+
+
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.05); /* Petite ombre intérieure */
+}
+
+.overview-item:nth-child(1) { border-top: 5px solid #007bff; } /* Total Interventions - Bleu */
+.overview-item:nth-child(2) { border-top: 5px solid #28a745; } /* Résolues - Vert */
+.overview-item:nth-child(3) { border-top: 5px solid #ffc107; } /* En cours/attente - Jaune */
+.overview-item:nth-child(4) { border-top: 5px solid #e83e8c; } /* Taux de résolution - Rose/Violet */
+
+
+.overview-value {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.overview-label {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Liste des Statistiques par Société */
+.company-stats-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Deux ou trois colonnes */
+    gap: 20px;
+}
+
+.company-stat-item {
+    background-color: #f0f8ff; /* Légèrement bleu pour les sociétés */
+    border: 1px solid #e0f2ff;
+    border-left: 5px solid #007bff; /* Barre latérale bleue */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.company-stat-item h4 {
+    font-size: 18px;
+    color: #007bff;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.company-stat-item p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.company-stat-item .action-button.small {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.company-stat-item .action-button.small:hover {
+    background-color: #0056b3;
+}
+
+/* Liste des Pannes Fréquentes */
+.frequent-errors-list p {
+    background-color: #fff3cd; /* Fond jaune clair pour les pannes */
+    border: 1px solid #ffeeba;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: #856404; /* Texte foncé pour contraste */
+}
+.frequent-errors-list p strong {
+    color: #5d4000;
+}
+
+
+/* Grille des Imprimantes Nécessitant une Attention */
+.attention-printers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 3-4 colonnes */
+    gap: 20px;
+}
+
+.printer-attention-card {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: relative; /* Pour l'icône de coin */
+}
+
+.printer-attention-card h4 {
+    font-size: 18px;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.printer-attention-card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.printer-attention-card .status-active {
+    color: #28a745; /* Vert pour Actif */
+    font-weight: bold;
+}
+
+.printer-attention-card .status-inactive {
+    color: #dc3545; /* Rouge pour Inactif */
+    font-weight: bold;
+}
+
+.printer-attention-card .status-maintenance {
+    color: #ffc107; /* Jaune pour Maintenance */
+    font-weight: bold;
+}
+.printer-attention-card .status-unknown {
+    color: #6c757d; /* Gris pour Inconnu */
+    font-weight: bold;
+}
+
+.printer-attention-card .action-button.small {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.printer-attention-card .action-button.small:hover {
+    background-color: #0056b3;
+}
+
+/* Icône "Feu" ou "Danger" dans le coin des cartes imprimantes */
+.printer-attention-card::before {
+    content: '🔥'; /* Emoji flamme ou vous pouvez utiliser une icône SVG/FontAwesome */
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    opacity: 0.8;
+}
+
+/* Media Queries pour la responsivité (ajustez selon vos besoins) */
+@media (max-width: 992px) {
+    .overview-grid,
+    .company-stats-list,
+    .attention-printers-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .management-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .management-header h2 {
+        font-size: 24px;
+    }
+    .breadcrumb {
+        margin-top: 5px;
+    }
+    .overview-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+    .filter-bar .search-input {
+        width: 100%;
+        min-width: auto;
+    }
+    .filter-bar .search-input input {
+        padding-left: 2.5rem;
+    }
+    .filter-bar .search-input svg {
+        display: block;
+    }
+    .filter-bar .search-button {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .overview-grid {
+        grid-template-columns: 1fr;
+    }
+    .company-stats-list,
+    .attention-printers-grid {
+        grid-template-columns: 1fr;
+    }
+    .management-page-container {
+        padding: 15px;
+    }
+}
+
+/* Styles pour les conteneurs de graphiques, si nécessaire */
+.pie-chart-container {
+    width: 100%;
+    max-width: 400px; /* Limite la taille pour éviter un graphique trop grand */
+    margin: 20px auto; /* Centre le graphique */
+    height: 300px; /* Donne une hauteur fixe */
+}
+
+/* Styles pour la légende de la liste (optionnel, pour faire correspondre les couleurs) */
+.frequent-errors-list p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+
+/* Styles pour les couleurs du taux de résolution */
+.resolution-rate-high {
+    color: var(--primary-green); /* Définissez cette variable dans votre CSS global si ce n'est pas déjà fait */
+    font-weight: bold;
+}
+.resolution-rate-medium {
+    color: var(--primary-orange); /* Définissez cette variable */
+    font-weight: bold;
+}
+.resolution-rate-low {
+    color: var(--primary-red); /* Définissez cette variable */
+    font-weight: bold;
+}
+
+/* Animations pour les KPI */
+.overview-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.overview-item.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.overview-item.delay-1 { transition-delay: 0.1s; }
+.overview-item.delay-2 { transition-delay: 0.2s; }
+.overview-item.delay-3 { transition-delay: 0.3s; }
+.overview-item.delay-4 { transition-delay: 0.4s; }
+
+/* Styles pour la barre de filtres améliorée */
+.analysis-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    background-color: var(--card-background); /* Utiliser une variable si définie */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-small); /* Utiliser une variable si définie */
+}
+
+.analysis-filters .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.analysis-filters .filter-group label {
+    font-weight: bold;
+    color: var(--text-color-dark);
+}
+
+.analysis-filters .filter-group select,
+.analysis-filters .period-buttons button {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--background-color-light);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.analysis-filters .filter-group select:focus,
+.analysis-filters .period-buttons button:hover:not(.active) {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.analysis-filters .period-buttons button.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.analysis-filters .filter-icon {
+    color: var(--primary-color);
+    font-size: 1.2em;
+}
+
+/* Styles pour la barre de recherche spécifique à l'analyse */
+.search-bar-analysis {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: var(--shadow-small);
+}
+
+.search-bar-analysis .search-input-group {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.search-bar-analysis .search-icon {
+    margin-right: 10px;
+}
+
+.search-bar-analysis .search-input-field {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1em;
+    color: var(--text-color);
+    background-color: var(--background-color-light);
+}
+
+.search-bar-analysis .search-input-field:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
+}
+
+/* Assurez-vous que vos variables CSS comme --primary-green, --primary-orange, --primary-red, etc.
+sont définies dans un fichier CSS global (par exemple, index.css ou App.css) */
+:root {
+    --primary-color: #007bff;
+    --primary-color-rgb: 0, 123, 255;
+    --primary-green: #28a745;
+    --primary-orange: #ffc107;
+    --primary-red: #dc3545;
+    --text-color: #333;
+    --text-color-light: #666;
+    --text-color-dark: #000;
+    --background-color: #f4f7f6;
+    --background-color-light: #ffffff;
+    --card-background: #ffffff;
+    --border-color: #e0e0e0;
+    --shadow-small: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.list-container {
+    display: flex; /* Active Flexbox */
+    flex-wrap: wrap; /* Permet aux éléments de passer à la ligne suivante */
+    gap: 20px; /* Espace entre les cartes */
+    justify-content: flex-start; /* Alignement au début */
+    padding: 15px; /* Optionnel: padding autour des cartes */
+    border-radius: 8px; /* Optionnel: bordure arrondie pour le conteneur */
+    background-color: #f8f9fa; /* Couleur de fond légère pour le conteneur */
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.05); /* Ombre interne légère */
+    width: 100%; /* S'assure que le conteneur prend toute la largeur disponible */
+}
+
+/* Styles pour chaque carte de département */
+.list-item {
+    flex: 1 1 calc(33% - 20px); /* Ajuste la taille pour 3 éléments par ligne avec un espacement de 20px */
+    /* Vous pouvez ajuster le 33% pour avoir 2 éléments (48%) ou plus (23%) */
+    min-width: 280px; /* Largeur minimale pour éviter qu'elles ne soient trop petites */
+    background-color: #ffffff; /* Couleur de fond de la carte (blanc ou autre couleur claire) */
+    border: 1px solid #e0e0e0; /* Bordure légère */
+    border-radius: 10px; /* Bords arrondis pour la carte */
+    padding: 20px; /* Espacement interne */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre douce pour un effet de carte */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animation au survol */
+    display: flex; /* Active flexbox à l'intérieur de la carte pour l'agencement du contenu */
+    flex-direction: column; /* Organise le contenu en colonne */
+    justify-content: space-between; /* Espace le contenu verticalement (p.ex. bouton en bas) */
+}
+
+.list-item:hover {
+    transform: translateY(-3px); /* Effet de légère élévation au survol */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée au survol */
+}
+
+.list-item p {
+    margin-bottom: 8px; /* Espacement entre les paragraphes */
+    color: #333; /* Couleur du texte */
+}
+
+.list-item p strong {
+    color: #007bff; /* Couleur plus vive pour les titres ou noms */
+}
+
+.list-item .action-button.small {
+    margin-top: 15px; /* Espacement au-dessus du bouton */
+    align-self: flex-end; /* Aligne le bouton à droite si flex-end est utilisé avec flex-direction: column */
+    /* Ou align-self: center; si vous voulez le centrer */
+}
+
+.error-dot{
+display: inline-block;
+width: 12px;
+height: 12px;
+margin-right: 8px;
+border-radius: 50%;
+transition: transform 0.2s ease;
+}
+
+/* .frequent-errors-list span:hover {
+  transform: scale(1.3);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+} */
+
+/* Styles pour la barre de recherche et le sélecteur "éléments par page" */
+.table-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Permet aux éléments de s'enrouler sur les petits écrans */
+    gap: 15px; /* Espace entre les éléments */
+}
+
+.search-bar-table {
+    position: relative;
+    flex-grow: 1; /* Permet à la barre de recherche de prendre plus d'espace */
+    max-width: 350px; /* Largeur maximale pour la barre de recherche */
+}
+
+.search-bar-table input {
+    width: 100%;
+    padding: 10px 10px 10px 40px; /* Espacement pour l'icône */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: var(--card-bg-color);
+    transition: all 0.2s ease-in-out;
+}
+
+.search-bar-table input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
+    outline: none;
+}
+
+.search-bar-table .search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    /* color: var(--text-muted-color); */
+    font-size: 1.1rem;
+}
+
+.items-per-page-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-color);
+}
+
+.items-per-page-selector label {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.items-per-page-selector select {
+    padding: 8px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    cursor: pointer;
+    -webkit-appearance: none; /* Supprime le style par défaut sur Webkit */
+    -moz-appearance: none;    /* Supprime le style par défaut sur Firefox */
+    appearance: none;         /* Supprime le style par défaut */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); /* Icône de flèche personnalisée */
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 18px;
+    padding-right: 30px; /* Espace pour la flèche */
+}
+
+.items-per-page-selector select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
+    outline: none;
+}
+
+
+/* Styles pour la pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 5px; /* Espace entre les boutons */
+    flex-wrap: wrap; /* Permet aux boutons de s'enrouler */
+}
+
+.pagination button {
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 8px 14px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.pagination button.active {
+    background-color: var(--accent-color); /* Couleur distinctive pour la page active */
+    color: blue;
+    border-color: var(--accent-color);
+    font-weight: bold;
+}
+
+.pagination button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--background-color); /* Un fond plus neutre pour désactivé */
+    color: var(--text-muted-color);
+}
+
+/* Styles pour les icônes de flèche dans les boutons de pagination */
+.pagination button svg {
+    font-size: 1.1em;
+}
+
+/* Media queries pour la responsivité (optionnel mais recommandé) */
+@media (max-width: 768px) {
+    .table-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-bar-table {
+        max-width: 100%; /* La barre de recherche prend toute la largeur sur mobile */
+        width: 100%;
+    }
+
+    .items-per-page-selector {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .pagination {
+        padding: 0 10px; /* Pour éviter que les boutons touchent les bords */
+    }
+}

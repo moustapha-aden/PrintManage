@@ -1,0 +1,778 @@
+/* ==================== VARIABLES CSS PROFESSIONNELLES ==================== */
+:root {
+  --primary-red: #D92231;
+  --primary-red-dark: #B91C1C;
+  --primary-red-light: #FEE2E2;
+  --text-white: #ffffff;
+  --text-light: #f8fafc;
+  --text-gray: #6b7280;
+  --text-gray-light: #9ca3af;
+  --text-dark: #111827;
+  --background-white: #ffffff;
+  --background-light: #f9fafb;
+  --border-color: #e5e7eb;
+  --border-color-dark: #374151;
+  --modal-overlay: rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-red: 0 4px 14px 0 rgba(217, 34, 49, 0.15);
+  --border-radius: 0.75rem;
+  --border-radius-lg: 1rem;
+  --transition-fast: all 0.15s ease-in-out;
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --backdrop-blur: blur(4px);
+  
+  /* Variables responsives */
+  --modal-padding: clamp(1.5rem, 3vw, 2.5rem);
+  --modal-width: clamp(300px, 90vw, 600px);
+  --modal-max-height: clamp(80vh, 90vh, 95vh);
+  --font-size-modal-title: clamp(1.5rem, 3vw, 2rem);
+  --font-size-form-label: clamp(0.875rem, 2vw, 0.9375rem);
+  --font-size-form-input: clamp(0.875rem, 2vw, 0.9375rem);
+  --font-size-button: clamp(0.875rem, 2vw, 1rem);
+  --button-padding: clamp(0.75rem, 1.5vw, 0.875rem) clamp(1.25rem, 2.5vw, 1.5rem);
+  --form-gap: clamp(1rem, 2vw, 1.5rem);
+  --close-button-size: clamp(2rem, 4vw, 2.5rem);
+  --input-padding: clamp(0.75rem, 1.5vw, 0.875rem) clamp(1rem, 2vw, 1.125rem);
+}
+
+/* ==================== MODAL OVERLAY ==================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--modal-overlay);
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeInOverlay 0.2s ease-out;
+    padding: clamp(0.5rem, 2vw, 1rem);
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ==================== MODAL CONTENT ==================== */
+.modal-content {
+  background: var(--background-white);
+  padding: var(--modal-padding);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-color);
+  width: var(--modal-width);
+  max-width: 90vw;
+  position: relative;
+  animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: var(--modal-max-height);
+  overflow-y: auto;
+  color: var(--text-dark);
+  min-width: 0;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-red), var(--primary-red-dark));
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+  pointer-events: none;
+}
+
+/* ==================== MODAL HEADER ==================== */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.modal-header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: min(80px, 30%);
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-red), var(--primary-red-dark));
+  border-radius: 1px;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: var(--font-size-modal-title);
+  font-weight: 700;
+  color: var(--text-dark);
+  word-break: break-word;
+  hyphens: auto;
+  flex: 1 1 auto;
+  min-width: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.modal-close-button {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  font-size: 1.25rem;
+  color: var(--text-gray);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--close-button-size);
+  height: var(--close-button-size);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.modal-close-button:hover {
+  color: var(--text-dark);
+  border-color: var(--primary-red);
+  background: var(--primary-red-light);
+  transform: scale(1.05);
+}
+
+/* ==================== FORM GROUPS ==================== */
+.form-group {
+  margin-bottom: var(--form-gap);
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.form-group:nth-child(1) { animation-delay: 0.1s; }
+.form-group:nth-child(2) { animation-delay: 0.2s; }
+.form-group:nth-child(3) { animation-delay: 0.3s; }
+.form-group:nth-child(4) { animation-delay: 0.4s; }
+.form-group:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: var(--font-size-form-label);
+  color: var(--text-dark);
+  word-break: break-word;
+  line-height: 1.5;
+}
+
+/* ==================== FORM INPUTS ==================== */
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="datetime-local"],
+.form-group input[type="number"],
+.form-group input[type="file"],
+.form-group input[type="tel"],
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: var(--input-padding);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-form-input);
+  color: var(--text-dark);
+  background: var(--background-white);
+  transition: var(--transition-smooth);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--text-gray-light);
+}
+
+.form-group input:focus,
+.form-group input[type="datetime-local"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(217, 34, 49, 0.1);
+  transform: none;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: clamp(80px, 15vw, 120px);
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.form-group select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25rem 1.25rem;
+  padding-right: 2.5rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.form-group select:hover {
+  border-color: var(--primary-red-light);
+}
+
+.form-group input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--background-white);
+  cursor: pointer;
+  font-size: var(--font-size-form-input);
+  transition: var(--transition-smooth);
+}
+
+.form-group input[type="file"]:hover {
+  border-color: var(--primary-red-light);
+  background: var(--background-light);
+}
+
+.form-group input[type="file"]:focus {
+  outline: none;
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(217, 34, 49, 0.1);
+}
+
+
+/* ==================== FORM ACTIONS ==================== */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  border-top: 2px solid var(--border-color);
+  padding-top: 1.5rem;
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
+}
+
+.form-actions::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: min(80px, 30%);
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-red), var(--primary-red-dark));
+  border-radius: 1px;
+}
+
+/* ==================== FORM BUTTONS ==================== */
+.form-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--button-padding);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: var(--font-size-button);
+  font-weight: 600;
+  transition: var(--transition-smooth);
+  min-width: clamp(100px, 20vw, 120px);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.form-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent
+  );
+  transition: var(--transition-smooth);
+}
+
+.form-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.form-button:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.form-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.form-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.form-button.submit {
+  background: linear-gradient(135deg, var(--primary-red), var(--primary-red-dark));
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-button.submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--primary-red-dark), #991B1B);
+  box-shadow: var(--shadow-red);
+}
+
+.form-button.cancel {
+  background: var(--background-white);
+  color: var(--text-dark);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-button.cancel:hover:not(:disabled) {
+  background: var(--background-light);
+  border-color: var(--text-gray);
+  color: var(--text-dark);
+}
+
+.form-button.success {
+  background: linear-gradient(135deg, var(--primary-red), var(--primary-red-dark));
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-button.success:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--primary-red-dark), #991B1B);
+  box-shadow: var(--shadow-red);
+}
+
+/* ==================== LOADING STATE ==================== */
+.form-button.loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.form-button.loading::after {
+  content: '';
+  position: absolute;
+  width: clamp(16px, 3vw, 20px);
+  height: clamp(16px, 3vw, 20px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid var(--text-white);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 0.5rem;
+}
+
+.form-button.cancel.loading::after {
+  border: 2px solid var(--border-color);
+  border-top: 2px solid var(--text-dark);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==================== SCROLLBAR STYLING ==================== */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: var(--background-light);
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: var(--primary-red);
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-red-dark);
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+/* Extra Large Screens - 1600px+ */
+@media (min-width: 1600px) {
+  :root {
+    --modal-padding: 3.5rem;
+    --modal-width: 700px;
+    --font-size-modal-title: 2.5rem;
+    --form-gap: 2rem;
+    --close-button-size: 3.5rem;
+  }
+}
+
+/* Large Desktop - 1400px to 1599px */
+@media (min-width: 1400px) and (max-width: 1599px) {
+  :root {
+    --modal-padding: 3rem;
+    --modal-width: 650px;
+    --font-size-modal-title: 2.25rem;
+    --form-gap: 1.75rem;
+    --close-button-size: 3.25rem;
+  }
+}
+
+/* Medium Desktop - 1200px to 1399px */
+@media (min-width: 1200px) and (max-width: 1399px) {
+  :root {
+    --modal-padding: 2.75rem;
+    --modal-width: 600px;
+    --font-size-modal-title: 2rem;
+    --form-gap: 1.5rem;
+    --close-button-size: 3rem;
+  }
+}
+
+/* Small Desktop - 1025px to 1199px */
+@media (min-width: 1025px) and (max-width: 1199px) {
+  :root {
+    --modal-padding: 2.5rem;
+    --modal-width: 550px;
+    --font-size-modal-title: 1.8rem;
+    --form-gap: 1.4rem;
+    --close-button-size: 2.8rem;
+  }
+}
+
+/* Tablet Landscape - 769px to 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --modal-padding: 2.25rem;
+    --modal-width: 85vw;
+    --modal-max-height: 85vh;
+    --font-size-modal-title: 1.7rem;
+    --form-gap: 1.3rem;
+    --close-button-size: 2.6rem;
+  }
+  
+  .modal-content {
+    max-width: 85vw;
+  }
+  
+  .form-actions {
+    gap: 0.8rem;
+  }
+}
+
+/* Tablet Portrait - 481px to 768px */
+@media (max-width: 768px) {
+  :root {
+    --modal-padding: 2rem;
+    --modal-width: 95vw;
+    --modal-max-height: 90vh;
+    --font-size-modal-title: 1.6rem;
+    --form-gap: 1.2rem;
+    --close-button-size: 2.5rem;
+    --button-padding: 0.8rem 1.5rem;
+  }
+  
+  .modal-content {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .modal-header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  
+  .modal-close-button {
+    align-self: flex-end;
+    margin-top: -0.5rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+  }
+  
+  .form-button {
+    width: 100%;
+    margin: 0;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    font-size: 16px; /* Évite le zoom sur iOS */
+  }
+}
+
+/* Mobile - 361px to 480px */
+@media (max-width: 480px) {
+  :root {
+    --modal-padding: 1.5rem;
+    --modal-width: 100vw;
+    --modal-max-height: 95vh;
+    --font-size-modal-title: 1.4rem;
+    --form-gap: 1rem;
+    --close-button-size: 2.2rem;
+    --input-padding: 0.8rem 1rem;
+    --button-padding: 0.8rem 1.2rem;
+  }
+  
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+  
+  .modal-content {
+    width: 100%;
+    max-height: 95vh;
+    border-radius: var(--border-radius);
+  }
+  
+  .modal-header {
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group label {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 0.8rem 1rem;
+    font-size: 16px; /* Évite le zoom sur iOS */
+  }
+  
+  .form-actions {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+  }
+  
+  .form-button {
+    padding: 0.8rem 1rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Extra Small Mobile - 320px to 360px */
+@media (max-width: 360px) {
+  :root {
+    --modal-padding: 1rem;
+    --font-size-modal-title: 1.2rem;
+    --form-gap: 0.8rem;
+    --close-button-size: 2rem;
+    --input-padding: 0.7rem 0.8rem;
+    --button-padding: 0.7rem 1rem;
+  }
+  
+  .modal-content {
+    padding: 1rem;
+    margin: 0.25rem;
+  }
+  
+  .modal-header {
+    margin-bottom: 1.25rem;
+  }
+  
+  .form-group {
+    margin-bottom: 0.8rem;
+  }
+  
+  .form-button {
+    padding: 0.7rem 0.8rem;
+    font-size: 0.9rem;
+    min-width: 80px;
+  }
+}
+
+/* Landscape Orientation on Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  :root {
+    --modal-max-height: 85vh;
+    --modal-padding: 1.5rem;
+  }
+  
+  .modal-content {
+    max-height: 85vh;
+    width: 95%;
+  }
+  
+  .modal-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .modal-close-button {
+    align-self: center;
+    margin-top: 0;
+  }
+  
+  .form-actions {
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+  
+  .form-button {
+    width: auto;
+    min-width: 100px;
+  }
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .modal-content,
+  .modal-overlay,
+  .form-group,
+  .form-button {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .form-button:hover,
+  .modal-close-button:hover {
+    transform: none !important;
+  }
+}
+
+/* ==================== HIGH CONTRAST MODE ==================== */
+@media (prefers-contrast: high) {
+  .modal-content {
+    border: 2px solid var(--text-white) !important;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    border: 2px solid var(--text-white) !important;
+  }
+  
+  .form-button {
+    border: 2px solid var(--text-white) !important;
+  }
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+  .modal-overlay {
+    display: none !important;
+  }
+  
+  .modal-content {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding: 1rem !important;
+  }
+  
+  .form-button {
+    display: none !important;
+  }
+  
+  .modal-close-button {
+    display: none !important;
+  }
+}
+
+/* ==================== CONTAINER QUERIES (Future-proofing) ==================== */
+@container (max-width: 400px) {
+  .modal-content {
+    padding: 1rem;
+  }
+  
+  .form-group {
+    margin-bottom: 0.8rem;
+  }
+  
+  .form-button {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+  }
+}
+
+@container (max-width: 300px) {
+  .modal-header h2 {
+    font-size: 1.1rem;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}
