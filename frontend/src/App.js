@@ -87,19 +87,28 @@ const PrivateRoute = ({ children, allowedRoles }) => {
 function App() {
     // Fonction utilitaire pour rediriger vers le dashboard approprié après connexion
     const redirectToRoleDashboard = () => {
+        const authToken = localStorage.getItem('authToken');
         const role = localStorage.getItem('userRole');
-        switch (role) {
-            case 'admin': return <Navigate to="/admin/dashboard" replace />;
-            case 'technicien': return <Navigate to="/technician/dashboard" replace />;
-            case 'client': return <Navigate to="/client/dashboard" replace />;
-            default: return <Navigate to="/login" replace />; // Si le rôle est inconnu ou non défini
+        
+        // Si l'utilisateur est connecté, rediriger vers son dashboard
+        if (authToken && role) {
+            switch (role) {
+                case 'admin': return <Navigate to="/admin/dashboard" replace />;
+                case 'technicien': return <Navigate to="/technician/dashboard" replace />;
+                case 'client': return <Navigate to="/client/dashboard" replace />;
+                default: return <LoginPage />;
+            }
         }
+        
+        // Sinon, afficher la page de login (avec contenu landing)
+        return <LoginPage />;
     };
 
     return (
         <Router>
             <Routes>
                 {/* Routes publiques (pas de layout) */}
+                <Route path="/" element={redirectToRoleDashboard()} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<RegisterPage />} />
                 <Route path="/unauthorized" element={<Unauthorized />} />
@@ -107,9 +116,6 @@ function App() {
                 {/* Le token et l'email seront passés comme paramètres d'URL */}
                 <Route path="/reset-password/:token/:email" element={<ResetPasswordPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
-                {/* Route par défaut qui redirige vers le dashboard approprié après authentification */}
-                {/* Si l'utilisateur est déjà connecté, il sera redirigé vers son dashboard spécifique */}
-                <Route path="/" element={redirectToRoleDashboard()} />
 
                 {/* Toutes les routes protégées avec le layout */}
                 {/* L'authentification et l'autorisation sont gérées par PrivateRoute sur l'élément <AppLayout> parent */}
