@@ -225,7 +225,7 @@
 .modal-body {
   flex-grow: 1;
   padding-right: clamp(0.5rem, 1vw, 1rem);
-  color: var(--text-light);
+  /* color: var(--text-light); */
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   position: relative;
   z-index: 1;
