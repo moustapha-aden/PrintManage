@@ -52,4 +52,8 @@ class Company extends Model
     {
         return $this->hasMany(Printer::class);
     }
+    public function inventaires()
+    {
+        return $this->hasMany(Inventaire::class);
+    }
 }

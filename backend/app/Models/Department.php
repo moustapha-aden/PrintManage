@@ -37,4 +37,8 @@ class Department extends Model
     {
         return $this->hasMany(User::class);
     }
+    public function inventaires()
+    {
+        return $this->hasMany(Inventaire::class);
+    }
 }

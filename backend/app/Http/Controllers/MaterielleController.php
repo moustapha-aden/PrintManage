@@ -16,7 +16,9 @@ class MaterielleController extends Controller
        // Récupère tous les matériels avec leurs inventaires (déplacements)
         $materielles = Materielle::with([
             'inventaires.printer.company',
-            'inventaires.printer.department'
+            'inventaires.printer.department',
+            'inventaires.company',
+            'inventaires.department'
         ])->get();
         return response()->json($materielles);
     }
@@ -51,7 +53,9 @@ class MaterielleController extends Controller
     {
         return response()->json($materielle->load([
             'inventaires.printer.company',
-            'inventaires.printer.department'
+            'inventaires.printer.department',
+            'inventaires.company',
+            'inventaires.department'
         ]));
     }
 

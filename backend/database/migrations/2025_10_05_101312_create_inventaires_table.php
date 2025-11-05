@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('materiel_id')->constrained('materielles')->onDelete('cascade');
             $table->integer('quantite');
-            $table->foreignId('printer_id')->constrained('printers')->onDelete('cascade');
+            $table->foreignId('printer_id')->nullable()->constrained('printers')->onDelete('cascade');
+            $table->foreignId('company_id')->nullable()->constrained('companies'); // ID de la société, clé étrangère
+            $table->foreignId('department_id')->nullable()->constrained('departments'); // ID du département, clé étrangère
             $table->date('date_deplacement');
             $table->timestamps();
         });

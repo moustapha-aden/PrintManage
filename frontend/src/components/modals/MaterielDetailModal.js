@@ -93,18 +93,28 @@ const MaterielDetailModal = forwardRef(({ materiel, onClose, style }, detailRef)
                                     </thead>
                                     <tbody>
                                         {inventaires.map((inventaire, index) => {
-                                            const printer = inventaire.printer || {};
+                                            const printer = inventaire.printer || null;
+                                            // Si l'imprimante existe, utiliser ses données, sinon utiliser celles de l'inventaire
+                                            const companyName = printer 
+                                                ? (printer.company?.name || 'N/A')
+                                                : (inventaire.company?.name || 'N/A');
+                                            const departmentName = printer 
+                                                ? (printer.department?.name || 'N/A')
+                                                : (inventaire.department?.name || 'N/A');
                                             
                                             return (
                                                 <tr key={inventaire.id || index} style={styles.tableRow}>
                                                     <td style={styles.tableCell}>
-                                                        {printer.model || 'N/A'} {printer.serial ? `(${printer.serial})` : ''}
+                                                        {printer 
+                                                            ? `${printer.model || 'N/A'} ${printer.serial ? `(${printer.serial})` : ''}`
+                                                            : 'Stock'
+                                                        }
                                                     </td>
                                                     <td style={styles.tableCell}>
-                                                        {printer.company?.name || 'N/A'}
+                                                        {companyName}
                                                     </td>
                                                     <td style={styles.tableCell}>
-                                                        {printer.department?.name || 'N/A'}
+                                                        {departmentName}
                                                     </td>
                                                     <td style={{ ...styles.tableCell, textAlign: 'center', fontWeight: 'bold' }}>
                                                         <span style={{

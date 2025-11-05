@@ -13,6 +13,8 @@ class Inventaire extends Model
         'quantite',
         'printer_id',
         'date_deplacement',
+        'company_id',
+        'department_id',
     ];
     public function materiel()
     {
@@ -22,5 +24,13 @@ class Inventaire extends Model
     public function printer()
     {
         return $this->belongsTo(Printer::class, 'printer_id');
+    }
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id');
+    }
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
     }
 }

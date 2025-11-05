@@ -92,25 +92,17 @@ const AddInventaireForm = forwardRef(
             }
         }, [selectedCompanyId, allDepartments, selectedDepartmentId]);
 
-        // 🔹 ÉTAPE 2 : Filtrage des imprimantes selon société ET département
+        // 🔹 ÉTAPE 2 : Filtrage des imprimantes selon le département sélectionné
         useEffect(() => {
-            let printers = allPrinters;
-
-            if (selectedCompanyId) {
-                printers = printers.filter(p => p.company_id === parseInt(selectedCompanyId, 10));
-            }
-
             if (selectedDepartmentId) {
-                printers = printers.filter(p => p.department_id === parseInt(selectedDepartmentId, 10));
+                // Filtrer uniquement par département
+                const printers = allPrinters.filter(p => p.department_id === parseInt(selectedDepartmentId, 10));
+                setFilteredPrinters(printers);
+            } else {
+                // Si pas de département sélectionné, vider la liste
+                setFilteredPrinters([]);
             }
-
-            setFilteredPrinters(printers);
-
-            // Réinitialiser l'imprimante si plus dans la liste filtrée
-            if (inventaireData.printer_id && !printers.find(p => p.id === inventaireData.printer_id)) {
-                setInventaireData(prev => ({ ...prev, printer_id: '' }));
-            }
-        }, [selectedCompanyId, selectedDepartmentId, allPrinters]);
+        }, [selectedDepartmentId, allPrinters]);
 
         // Initialisation du formulaire (mode édition ou ajout)
         useLayoutEffect(() => {
@@ -118,8 +110,13 @@ const AddInventaireForm = forwardRef(
                 const printer = allPrinters.find(p => p.id === inventaireToEdit.printer_id);
                 
                 if (printer) {
+                    // Si une imprimante existe, utiliser ses company_id et department_id
                     setSelectedCompanyId(String(printer.company_id) || '');
                     setSelectedDepartmentId(String(printer.department_id) || '');
+                } else if (inventaireToEdit.company_id && inventaireToEdit.department_id) {
+                    // Si pas d'imprimante mais company_id et department_id existent, les utiliser directement
+                    setSelectedCompanyId(String(inventaireToEdit.company_id) || '');
+                    setSelectedDepartmentId(String(inventaireToEdit.department_id) || '');
                 }
 
                 const editData = {
@@ -167,7 +164,7 @@ const AddInventaireForm = forwardRef(
         const handleDepartmentChange = (e) => {
             const deptId = e.target.value;
             setSelectedDepartmentId(deptId);
-            setInventaireData(prev => ({ ...prev, printer_id: '' })); // Reset imprimante
+            setInventaireData(prev => ({ ...prev, printer_id: '' })); // Reset imprimante quand le département change
             setLocalError(''); // Reset erreurs
             setApiError('');
         };
@@ -178,8 +175,8 @@ const AddInventaireForm = forwardRef(
             setLocalError('');
             setApiError('');
 
-            if (!inventaireData.materiel_id || !inventaireData.printer_id) {
-                setLocalError('Veuillez sélectionner un matériel et une imprimante.');
+            if (!inventaireData.materiel_id) {
+                setLocalError('Veuillez sélectionner un matériel.');
                 return;
             }
             if (inventaireData.quantite <= 0) {
@@ -187,9 +184,36 @@ const AddInventaireForm = forwardRef(
                 return;
             }
 
-            const dataToSave = isEditMode
-                ? { ...inventaireData, id: inventaireToEdit.id }
-                : inventaireData;
+            // Validation : soit une imprimante, soit company + department
+            if (!inventaireData.printer_id && (!selectedCompanyId || !selectedDepartmentId)) {
+                setLocalError('Veuillez sélectionner soit une imprimante, soit une société et un département.');
+                return;
+            }
+
+            // Préparer les données à sauvegarder
+            let dataToSave = {
+                materiel_id: inventaireData.materiel_id,
+                quantite: inventaireData.quantite,
+                date_deplacement: inventaireData.date_deplacement,
+            };
+
+            // Si une imprimante est sélectionnée, company_id et department_id doivent être null
+            // Sinon, utiliser les valeurs sélectionnées
+            if (inventaireData.printer_id) {
+                dataToSave.printer_id = inventaireData.printer_id;
+                dataToSave.company_id = null;
+                dataToSave.department_id = null;
+            } else {
+                // Si pas d'imprimante, utiliser les valeurs de company et department
+                dataToSave.printer_id = null;
+                dataToSave.company_id = selectedCompanyId ? parseInt(selectedCompanyId, 10) : null;
+                dataToSave.department_id = selectedDepartmentId ? parseInt(selectedDepartmentId, 10) : null;
+            }
+
+            // Ajouter l'ID en mode édition
+            if (isEditMode) {
+                dataToSave.id = inventaireToEdit.id;
+            }
 
             try {
                 await onSave(dataToSave);
@@ -241,13 +265,12 @@ const AddInventaireForm = forwardRef(
 
                         {/* 🔹 ÉTAPE 1 : SOCIÉTÉ (obligatoire pour activer département) */}
                         <div className="form-group">
-                            <label htmlFor="selectedCompanyId">Société * :</label>
+                            <label htmlFor="selectedCompanyId">Société :</label>
                             <select
                                 id="selectedCompanyId"
                                 name="selectedCompanyId"
                                 value={selectedCompanyId}
                                 onChange={handleCompanyChange}
-                                required
                                 disabled={isEditMode}
                             >
                                 <option value="">-- Sélectionner une société --</option>
@@ -259,13 +282,12 @@ const AddInventaireForm = forwardRef(
 
                         {/* 🔹 ÉTAPE 2 : DÉPARTEMENT (actif uniquement si société sélectionnée) */}
                         <div className="form-group">
-                            <label htmlFor="selectedDepartmentId">Département * :</label>
+                            <label htmlFor="selectedDepartmentId">Département :</label>
                             <select
                                 id="selectedDepartmentId"
                                 name="selectedDepartmentId"
                                 value={selectedDepartmentId}
                                 onChange={handleDepartmentChange}
-                                required
                                 disabled={!selectedCompanyId || isEditMode}
                             >
                                 <option value="">-- Sélectionner un département --</option>
@@ -278,29 +300,33 @@ const AddInventaireForm = forwardRef(
                             )}
                         </div>
 
-                        {/* 🔹 ÉTAPE 3 : IMPRIMANTE (actif uniquement si département sélectionné) */}
+                        {/* 🔹 ÉTAPE 3 : IMPRIMANTE (visible uniquement après sélection d'un département) */}
                         <div className="form-group">
-                            <label htmlFor="printer_id">Imprimante de destination * :</label>
+                            <label htmlFor="printer_id">Imprimante de destination :</label>
                             <select
                                 id="printer_id"
                                 name="printer_id"
                                 value={inventaireData.printer_id}
                                 onChange={handleChange}
-                                required
-                                disabled={!selectedDepartmentId}
+                                disabled={!selectedDepartmentId || isEditMode}
                             >
-                                <option value="">-- Sélectionner une imprimante --</option>
+                                <option value="">-- Sélectionner une imprimante (optionnel) --</option>
                                 {filteredPrinters.map(p => (
                                     <option key={p.id} value={p.id}>
-                                        {p.model} - {p.serial}
+                                        {p.model} - {p.serial} ({p.department?.name || 'N/A'})
                                     </option>
                                 ))}
                             </select>
                             {!selectedDepartmentId && (
-                                <small style={{ color: '#999' }}>Sélectionnez d'abord un département</small>
+                                <small style={{ color: '#999' }}>Sélectionnez d'abord un département pour voir les imprimantes</small>
                             )}
                             {selectedDepartmentId && filteredPrinters.length === 0 && (
                                 <small style={{ color: '#ff6b6b' }}>Aucune imprimante disponible dans ce département</small>
+                            )}
+                            {selectedDepartmentId && filteredPrinters.length > 0 && (
+                                <small style={{ color: '#666' }}>
+                                    Sélectionnez une imprimante ou laissez vide pour enregistrer uniquement le département
+                                </small>
                             )}
                         </div>
 

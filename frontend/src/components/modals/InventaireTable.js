@@ -48,7 +48,7 @@ const InventaireTable = React.memo(({
                             <tr key={inventaire.id}>
                                 <td style={style}>{inventaire.materiel?.reference || 'N/A'}</td>
                                 <td style={style}>{inventaire.materiel?.name || 'N/A'}</td>
-                                <td style={style}>{inventaire.printer?.model || 'N/A'} ({inventaire.printer?.serial || 'N/A'})</td>
+                                <td style={style}>{inventaire.printer ? `${inventaire.printer.model || 'N/A'} ${inventaire.printer.serial ? `(${inventaire.printer.serial})` : ''}` : 'Stock'}</td>
                                 <td style={style} className="center-text">{inventaire.quantite ?? '0'}</td>
                                 <td style={style} className="center-text">{inventaire.date_deplacement ?? '0'}</td>
                                 <td style={style} className="center-text">

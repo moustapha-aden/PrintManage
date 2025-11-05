@@ -108,10 +108,10 @@ const InventaireManagementPage = () => {
         }
     }, [selectedInventaire]);
 
-    // Filtrage côté client
+    // Filtrage côté client avec tri par date de création (décroissant)
     const filteredInventaires = useMemo(() => {
         const lowerCaseSearchTerm = searchTerm.toLowerCase();
-        return inventaires.filter(item => {
+        const filtered = inventaires.filter(item => {
             return (
                 lowerCaseSearchTerm === '' ||
                 String(item.id).includes(lowerCaseSearchTerm) ||
@@ -119,6 +119,13 @@ const InventaireManagementPage = () => {
                 (item.reference && item.reference.toLowerCase().includes(lowerCaseSearchTerm)) ||
                 (item.type && item.type.toLowerCase().includes(lowerCaseSearchTerm))
             );
+        });
+        
+        // Tri par date de création (du plus récent au plus ancien)
+        return filtered.sort((a, b) => {
+            const dateA = a.created_at ? new Date(a.created_at) : new Date(0);
+            const dateB = b.created_at ? new Date(b.created_at) : new Date(0);
+            return dateB - dateA; // Décroissant (plus récent en premier)
         });
     }, [inventaires, searchTerm]);
 

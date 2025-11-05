@@ -48,18 +48,34 @@ const InventaireDetailModal = forwardRef(({ inventaire, onClose, style }, detail
                     </div>
 
                     <div style={{ marginBottom: '20px', borderTop: '1px solid var(--border-color)', paddingTop: '20px' }}>
-                        <h3 style={styles.sectionTitle}>Informations de l'Imprimante</h3>
-                        <p style={styles.infoRow}><strong>Modèle:</strong> {inventaire.printer?.model || 'N/A'}</p>
-                        <p style={styles.infoRow}><strong>Marque:</strong> {inventaire.printer?.brand || 'N/A'}</p>
-                        <p style={styles.infoRow}><strong>N° Série:</strong> {inventaire.printer?.serial || 'N/A'}</p>
-                        <p style={styles.infoRow}>
-                            <strong>Statut:</strong> {inventaire.printer?.statusDisplay || 'N/A'}
-                        </p>
-                        {inventaire.printer?.company && (
-                            <p style={styles.infoRow}><strong>Société:</strong> {inventaire.printer.company.name}</p>
-                        )}
-                        {inventaire.printer?.department && (
-                            <p style={styles.infoRow}><strong>Département:</strong> {inventaire.printer.department.name}</p>
+                        <h3 style={styles.sectionTitle}>
+                            {inventaire.printer ? "Informations de l'Imprimante" : "Informations de Destination"}
+                        </h3>
+                        {inventaire.printer ? (
+                            <>
+                                <p style={styles.infoRow}><strong>Modèle:</strong> {inventaire.printer.model || 'N/A'}</p>
+                                <p style={styles.infoRow}><strong>Marque:</strong> {inventaire.printer.brand || 'N/A'}</p>
+                                <p style={styles.infoRow}><strong>N° Série:</strong> {inventaire.printer.serial || 'N/A'}</p>
+                                <p style={styles.infoRow}>
+                                    <strong>Statut:</strong> {inventaire.printer.statusDisplay || 'N/A'}
+                                </p>
+                                {inventaire.printer.company && (
+                                    <p style={styles.infoRow}><strong>Société:</strong> {inventaire.printer.company.name}</p>
+                                )}
+                                {inventaire.printer.department && (
+                                    <p style={styles.infoRow}><strong>Département:</strong> {inventaire.printer.department.name}</p>
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                <p style={styles.infoRow}><strong>Type:</strong> Stock</p>
+                                {inventaire.company && (
+                                    <p style={styles.infoRow}><strong>Société:</strong> {inventaire.company.name}</p>
+                                )}
+                                {inventaire.department && (
+                                    <p style={styles.infoRow}><strong>Département:</strong> {inventaire.department.name}</p>
+                                )}
+                            </>
                         )}
                         <p style={styles.infoRow}>
                             <strong>Quantité attribuée:</strong>{' '}

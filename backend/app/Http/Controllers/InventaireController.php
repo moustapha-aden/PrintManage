@@ -6,6 +6,7 @@ use App\Models\Inventaire;
 use App\Models\Materielle;
 use App\Models\Printer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InventaireController extends Controller
 {
@@ -17,7 +18,9 @@ class InventaireController extends Controller
         $inventaires = Inventaire::with([
             'materiel',
             'printer.company',
-            'printer.department'
+            'printer.department',
+            'company',
+            'department'
         ])->get();
 
         return response()->json($inventaires);
@@ -31,31 +34,60 @@ class InventaireController extends Controller
         $validated = $request->validate([
             'materiel_id' => 'required|exists:materielles,id',
             'quantite' => 'required|integer|min:1',
-            'printer_id' => 'required|exists:printers,id',
+            'printer_id' => 'nullable|exists:printers,id',
             'date_deplacement' => 'required|date',
+            'company_id' => 'nullable|exists:companies,id',
+            'department_id' => 'nullable|exists:departments,id',
         ]);
 
-        $materielle = Materielle::find($validated['materiel_id']);
-
-        if (!$materielle) {
-            return response()->json(['message' => 'Matériel non trouvé.'], 404);
+        // Validation personnalisée : soit printer_id, soit (company_id ET department_id)
+        if (!$validated['printer_id'] && (!$validated['company_id'] || !$validated['department_id'])) {
+            return response()->json([
+                'message' => 'Vous devez fournir soit une imprimante, soit une société et un département.'
+            ], 400);
         }
 
-        if ($materielle->quantite < $validated['quantite']) {
-            return response()->json(['message' => 'Quantité insuffisante en stock.'], 400);
+        // Si une imprimante est fournie, s'assurer que company_id et department_id sont null
+        if ($validated['printer_id']) {
+            $validated['company_id'] = null;
+            $validated['department_id'] = null;
+        } else {
+            // Si pas d'imprimante, s'assurer que printer_id est null
+            $validated['printer_id'] = null;
         }
 
-        // Met à jour la quantité disponible
-        $materielle->decrement('quantite', $validated['quantite']);
-        $materielle->increment('sortie', $validated['quantite']); // Pour suivi des sorties
+        DB::beginTransaction();
+        try {
+            $materielle = Materielle::find($validated['materiel_id']);
 
-        // Crée l'entrée d’inventaire
-        $inventaire = Inventaire::create($validated);
+            if (!$materielle) {
+                return response()->json(['message' => 'Matériel non trouvé.'], 404);
+            }
 
-        return response()->json([
-            'message' => 'Inventaire ajouté avec succès.',
-            'data' => $inventaire
-        ], 201);
+            if ($materielle->quantite < $validated['quantite']) {
+                return response()->json(['message' => 'Quantité insuffisante en stock.'], 400);
+            }
+
+            // Met à jour la quantité disponible
+            $materielle->decrement('quantite', $validated['quantite']);
+            $materielle->increment('sortie', $validated['quantite']); // Pour suivi des sorties
+
+            // Crée l'entrée d'inventaire
+            $inventaire = Inventaire::create($validated);
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Inventaire ajouté avec succès.',
+                'data' => $inventaire
+            ], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Erreur lors de la création de l\'inventaire.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -66,7 +98,9 @@ class InventaireController extends Controller
         $inventaire = Inventaire::with([
             'materiel',
             'printer.company',
-            'printer.department'
+            'printer.department',
+            'company',
+            'department'
         ])->find($id);
 
         if (!$inventaire) {
@@ -90,37 +124,82 @@ class InventaireController extends Controller
         $validated = $request->validate([
             'materiel_id' => 'sometimes|exists:materielles,id',
             'quantite' => 'sometimes|integer|min:1',
-            'printer_id' => 'sometimes|exists:printers,id',
+            'printer_id' => 'nullable|exists:printers,id',
             'date_deplacement' => 'sometimes|date',
+            'company_id' => 'nullable|exists:companies,id',
+            'department_id' => 'nullable|exists:departments,id',
         ]);
 
-        // Si on change le matériel ou la quantité, on ajuste le stock
-        if (isset($validated['materiel_id']) || isset($validated['quantite'])) {
-            $materiel = Materielle::find($validated['materiel_id'] ?? $inventaire->materiel_id);
+        // Déterminer les valeurs finales après merge avec les données existantes
+        $finalPrinterId = $validated['printer_id'] ?? $inventaire->printer_id;
+        $finalCompanyId = $validated['company_id'] ?? $inventaire->company_id;
+        $finalDepartmentId = $validated['department_id'] ?? $inventaire->department_id;
 
-            if (!$materiel) {
-                return response()->json(['message' => 'Matériel non trouvé.'], 404);
-            }
-
-            $newQuantite = $validated['quantite'] ?? $inventaire->quantite;
-            $difference = $newQuantite - $inventaire->quantite;
-
-            // Si on augmente la quantité déplacée → vérifier le stock
-            if ($difference > 0 && $materiel->quantite < $difference) {
-                return response()->json(['message' => 'Quantité insuffisante en stock.'], 400);
-            }
-
-            // Ajuster le stock selon la différence
-            $materiel->decrement('quantite', max($difference, 0));
-            $materiel->increment('quantite', max(-$difference, 0)); // Si on réduit la quantité
+        // Validation personnalisée : soit printer_id, soit (company_id ET department_id)
+        if (!$finalPrinterId && (!$finalCompanyId || !$finalDepartmentId)) {
+            return response()->json([
+                'message' => 'Vous devez fournir soit une imprimante, soit une société et un département.'
+            ], 400);
         }
 
-        $inventaire->update($validated);
+        // Si une imprimante est fournie, s'assurer que company_id et department_id sont null
+        if ($finalPrinterId) {
+            $validated['company_id'] = null;
+            $validated['department_id'] = null;
+        } else {
+            // Si pas d'imprimante, s'assurer que printer_id est null
+            $validated['printer_id'] = null;
+        }
 
-        return response()->json([
-            'message' => 'Inventaire mis à jour avec succès.',
-            'data' => $inventaire
-        ]);
+        // Utilisation d'une transaction pour garantir la cohérence
+        DB::beginTransaction();
+        try {
+            $oldMaterielId = $inventaire->materiel_id;
+            $oldQuantite = $inventaire->quantite;
+            $newMaterielId = $validated['materiel_id'] ?? $oldMaterielId;
+            $newQuantite = $validated['quantite'] ?? $oldQuantite;
+
+            // Si on change le matériel ou la quantité, on ajuste le stock
+            if ($oldMaterielId != $newMaterielId || $oldQuantite != $newQuantite) {
+                // Restaurer le stock de l'ancien matériel
+                $oldMateriel = Materielle::find($oldMaterielId);
+                if ($oldMateriel) {
+                    $oldMateriel->increment('quantite', $oldQuantite);
+                    $oldMateriel->decrement('sortie', $oldQuantite);
+                }
+
+                // Déduire du nouveau matériel
+                $newMateriel = Materielle::find($newMaterielId);
+                if (!$newMateriel) {
+                    DB::rollBack();
+                    return response()->json(['message' => 'Matériel non trouvé.'], 404);
+                }
+
+                // Vérifier le stock disponible
+                if ($newMateriel->quantite < $newQuantite) {
+                    DB::rollBack();
+                    return response()->json(['message' => 'Quantité insuffisante en stock.'], 400);
+                }
+
+                // Déduire la nouvelle quantité
+                $newMateriel->decrement('quantite', $newQuantite);
+                $newMateriel->increment('sortie', $newQuantite);
+            }
+
+            $inventaire->update($validated);
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Inventaire mis à jour avec succès.',
+                'data' => $inventaire->fresh()
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Erreur lors de la mise à jour.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -134,15 +213,26 @@ class InventaireController extends Controller
             return response()->json(['message' => 'Inventaire non trouvé.'], 404);
         }
 
-        // Rétablir le stock du matériel supprimé
-        $materiel = Materielle::find($inventaire->materiel_id);
-        if ($materiel) {
-            $materiel->increment('quantite', $inventaire->quantite);
-            $materiel->decrement('sortie', $inventaire->quantite);
+        DB::beginTransaction();
+        try {
+            // Rétablir le stock du matériel supprimé
+            $materiel = Materielle::find($inventaire->materiel_id);
+            if ($materiel) {
+                $materiel->increment('quantite', $inventaire->quantite);
+                $materiel->decrement('sortie', $inventaire->quantite);
+            }
+
+            $inventaire->delete();
+
+            DB::commit();
+
+            return response()->json(['message' => 'Inventaire supprimé avec succès.']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Erreur lors de la suppression de l\'inventaire.',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $inventaire->delete();
-
-        return response()->json(['message' => 'Inventaire supprimé avec succès.']);
     }
 }
