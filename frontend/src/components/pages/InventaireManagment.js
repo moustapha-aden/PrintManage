@@ -6,6 +6,7 @@ import {
     FiAlertCircle,
     FiChevronLeft,
     FiChevronRight,
+    FiFileText,
 } from 'react-icons/fi';
 import '../styles/ManagementPage.css';
 import '../styles/TableDisplay.css';
@@ -249,6 +250,54 @@ const InventaireManagementPage = () => {
         setSelectedInventaire(null);
     };
 
+    const handleExportPDF = useCallback(async () => {
+        setError(null);
+        try {
+            if (!authToken) {
+                setError("Non authentifié. Veuillez vous reconnecter.");
+                return;
+            }
+
+            const headers = {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${authToken}`,
+            };
+
+            const reportUrl = `${API_BASE_URL}/inventaires/report`;
+
+            // Récupérer le PDF
+            const response = await axios.get(reportUrl, { headers, responseType: "blob" });
+
+            if (!response.data || response.data.size === 0) {
+                setError("Aucune donnée disponible pour l'export.");
+                return;
+            }
+
+            // Créer un blob et forcer le téléchargement
+            const blob = new Blob([response.data], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+
+            // Ouvrir dans un nouvel onglet
+            window.open(url, "_blank");
+
+            // Téléchargement automatique
+            const link = document.createElement("a");
+            link.href = url;
+            const fileName = `rapport_inventaires_${new Date().toISOString().slice(0, 10)}.pdf`;
+            link.download = fileName;
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Nettoyer l'URL
+            URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error("Erreur API export PDF:", err.response ? err.response.data : err.message);
+            setError('Erreur lors de l\'export PDF : ' + (err.response?.data?.message || err.message));
+        }
+    }, [authToken]);
+
     if (loading) {
         return (
             <div style={cardStyle} className="management-page-container loading-overlay">
@@ -271,9 +320,14 @@ const InventaireManagementPage = () => {
             <div className="management-header" style={cardStyle}>
                 <h2>Gestion des Matériels</h2>
                 {currentUserRole === 'admin' && (
-                    <button className="new-button" onClick={handleOpenAddForm}>
-                        <FiPlusCircle /> Nouvelle Déplacement
-                    </button>
+                    <div className="action-buttons">
+                        <button className="new-button" onClick={handleOpenAddForm}>
+                            <FiPlusCircle /> Nouvelle Déplacement
+                        </button>
+                        <button className="new-button report-button" onClick={handleExportPDF} style={{ marginLeft: '12px' }}>
+                            <FiFileText /> Exporter PDF
+                        </button>
+                    </div>
                 )}
             </div>
 

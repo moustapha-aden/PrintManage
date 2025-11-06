@@ -21,7 +21,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\InventaireController;
+use App\Http\Controllers\InventaireReportController;
 use App\Http\Controllers\MaterielleController;
+use App\Http\Controllers\MaterielReportController;
 
 
 
@@ -101,6 +103,10 @@ Route::apiResource('brands', BrandController::class);
     Route::get('/analytics/departments-with-interventions', [AnalyticsController::class, 'getDepartmentsWithMostInterventions']);
     Route::get('/analytics/interventions/department/{departmentId}', [AnalyticsController::class, 'getInterventionsByDepartment']);
     Route::get('/analytics/all-interventions', [AnalyticsController::class, 'getAllInterventions']);
+
+    // Routes pour les rapports PDF (doivent être définies AVANT les apiResource pour éviter les conflits)
+    Route::get('/inventaires/report', [InventaireReportController::class, 'generateReport']);
+    Route::get('/materiel/report', [MaterielReportController::class, 'generateReport']);
 
     // materielle
     Route::apiResource('materiel', MaterielleController::class)->parameter('materiel', 'materielle');
