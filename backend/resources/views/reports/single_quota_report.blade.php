@@ -27,7 +27,6 @@
         <h1>Rapport Spécifique</h1>
         <p>Relevé du : {{ \Carbon\Carbon::parse($quota->date_prelevement)->format('d/m/Y') }}</p>
         <p>Imprimante : {{ $printer->brand }} {{ $printer->model }} ({{ $printer->serial }})</p>
-        <p>Généré le : {{ date('d/m/Y') }}</p>
     </div>
 
     <div class="section">
